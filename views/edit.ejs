@@ -1,0 +1,15 @@
+<%- include("partials/header"); %>
+<h1>Edit</h1>
+<form action="/posts/<%= title %>/edit" method="POST">
+    <div class="mb-3">
+        <label for="heading" class="form-label">Title</label>
+        <input type="text" class="form-control" name="postTitle" id="heading" value="<%= title %> ">
+    </div>
+    <div class="mb-3">
+        <label for="text" class="form-label">Post</label>
+        <textarea class="form-control" name="postText" id="text" rows="5"><%= content %> </textarea>
+    </div>
+    <button type="submit" class="btn btn-primary mb-3">Save changes</button>
+</form>
+<a href="/posts/<%= title %>"><button class="btn btn-outline-primary mb-3">Back</button></a>
+<%- include("partials/footer"); %>
