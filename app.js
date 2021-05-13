@@ -101,5 +101,5 @@ app.get("*", (req, res)=>{
 });
 
 app.listen(port, function(){
-    console.log(`Server started at port ${port}`)
+    console.log(`Server started at port ${port}`);
 });
