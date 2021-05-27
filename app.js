@@ -1,6 +1,13 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const ejs = require("ejs");
 const _ = require("lodash");
+
+mongoose.connect('mongodb://localhost:27017/blog', { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("Connected to database!"))
+    .catch(err => console.log(err));
+
+const Post = require("./models/post");
 
 const port = process.env.PORT || 3000;
 
@@ -16,8 +23,6 @@ const contactContent = "Lorem ipsum dolor sit amet consectetur adipisicing elit.
 "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum dolorem nostrum pariatur sed saepe, similique iste corrupti delectus aliquam officia alias inventore distinctio laboriosam in ea debitis, harum voluptatum perferendis." +
 "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum dolorem nostrum pariatur sed saepe, similique iste corrupti delectus aliquam officia alias inventore distinctio laboriosam in ea debitis, harum voluptatum perferendis.";
 
-const posts = [];
-
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -25,8 +30,9 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-app.get("/", (req, res)=>{
-    res.render("home", {homeStartingContent, posts});
+app.get("/", async (req, res)=>{
+    const post = await Post.find({});
+    res.render("home", {homeStartingContent, post});
 });
 app.get("/about", (req, res)=>{
     res.render("about", {aboutContent});
@@ -40,59 +46,47 @@ app.get("/compose", (req, res)=>{
     res.render("compose");
 });
 
-app.post("/compose", (req, res)=>{
-    const post = {
+app.post("/compose", async (req, res)=>{
+    const post = new Post({
         title: req.body.postTitle,
         content: req.body.postText
-    };
+    });
 
-    posts.push(post);
+    await post.save();
 
     res.redirect("/");
 });
 
-app.get("/posts/:postName", (req, res)=>{
-    let sent = false;
-    posts.forEach((item)=>{
-        if(_.lowerCase(item.title)===_.lowerCase(req.params.postName)){
-            res.render("post", {title: item.title, content: item.content});
-            sent = true;
-        }
-    });
-    if(!sent){
+app.get("/posts/:postName", async (req, res)=>{
+    try{
+        const post = await Post.find({title: req.params.postName});
+        console.log(post[0]);
+        res.render("post", {title: post[0].title, content: post[0].content});
+    }
+    catch(err){
+        console.log(err);
         res.render("404");
     }
 });
 
-app.get("/posts/:postName/edit", (req, res)=>{
-    let sent = false;
-    posts.forEach((item)=>{
-        if(_.lowerCase(item.title)===_.lowerCase(req.params.postName)){
-            res.render("edit", {title: item.title, content: item.content});
-            sent = true;
-        }
-    });
-    if(!sent){
+app.get("/posts/:postName/edit", async (req, res)=>{
+    try{
+        const post = await Post.find({title: req.params.postName});
+        res.render("edit", {title: post[0].title, content: post[0].content});
+    }
+    catch(err){
+        console.log(err);
         res.render("404");
     }
 });
 
-app.post("/posts/:postName/edit", (req, res)=>{
-    posts.forEach((item, index)=>{
-        if(_.lowerCase(item.title)===_.lowerCase(req.params.postName)){
-            posts[index].title = req.body.postTitle; 
-            posts[index].content = req.body.postText;
-        }
-    });
-    res.redirect("/");
+app.post("/posts/:postName/edit", async (req, res)=>{
+    await Post.updateOne({title: req.params.postName}, {title: req.body.postTitle, content: req.body.postText});
+    res.redirect(`/posts/${req.body.postTitle}`);
 });
 
-app.get("/posts/:postName/delete", (req, res)=>{
-    posts.forEach((item, index)=>{
-        if(_.lowerCase(item.title)===_.lowerCase(req.params.postName)){
-            posts.splice(index,1);
-        }
-    });
+app.get("/posts/:postName/delete", async (req, res)=>{
+    await Post.deleteOne({title: req.params.postName});
     res.redirect("/");
 });
 
