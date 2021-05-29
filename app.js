@@ -1,13 +1,19 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 const express = require("express");
 const mongoose = require("mongoose");
-const ejs = require("ejs");
 const _ = require("lodash");
 
-mongoose.connect('mongodb://localhost:27017/blog', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log("Connected to database!"))
-    .catch(err => console.log(err));
-
 const Post = require("./models/post");
+
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/blog';
+mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("Database connected!");
+});
 
 const port = process.env.PORT || 3000;
 
@@ -60,7 +66,6 @@ app.post("/compose", async (req, res)=>{
 app.get("/posts/:postName", async (req, res)=>{
     try{
         const post = await Post.find({title: req.params.postName});
-        console.log(post[0]);
         res.render("post", {title: post[0].title, content: post[0].content});
     }
     catch(err){
