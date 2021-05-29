@@ -1,6 +1,8 @@
 <%- include("partials/header"); %>
-<h1><%= title %> </h1>
-<p><%= content %> </p>
+<h1><%= title %></h1>
+<pre>
+    <p><%= content %></p>
+</pre>
 <a href="/posts/<%= title %>/edit"><button class="btn btn-warning mb-3">Edit</button></a>
 <a href="/posts/<%= title %>/delete"><button class="btn btn-danger mb-3">Delete</button></a>
 <br>

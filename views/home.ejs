@@ -5,7 +5,7 @@
 
 <% post.forEach(function(item, index){ %> 
     <h1><%= item.title %> </h1>
-    <p><%= item.content.substring(0, 100) + "..." %> <a href="/posts/<%= item.title %>">Read more</a></p>
+    <pre><p><%= item.content.split('\n')[0].substring(0, 100) + "..." %> <a href="/posts/<%= item.title %>">Read more</a></p></pre>
 <% }); %> 
 
 <form action="/compose" method="get">
