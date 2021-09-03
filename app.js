@@ -52,16 +52,16 @@ app.get("/compose", (req, res)=>{
     res.render("compose");
 });
 
-app.post("/compose", async (req, res)=>{
-    const post = new Post({
-        title: req.body.postTitle,
-        content: req.body.postText
-    });
+// app.post("/compose", async (req, res)=>{
+//     const post = new Post({
+//         title: req.body.postTitle,
+//         content: req.body.postText
+//     });
 
-    await post.save();
+//     await post.save();
 
-    res.redirect("/");
-});
+//     res.redirect("/");
+// });
 
 app.get("/posts/:postName", async (req, res)=>{
     try{
@@ -85,15 +85,15 @@ app.get("/posts/:postName/edit", async (req, res)=>{
     }
 });
 
-app.post("/posts/:postName/edit", async (req, res)=>{
-    await Post.updateOne({title: req.params.postName}, {title: req.body.postTitle, content: req.body.postText});
-    res.redirect(`/posts/${req.body.postTitle}`);
-});
+// app.post("/posts/:postName/edit", async (req, res)=>{
+//     await Post.updateOne({title: req.params.postName}, {title: req.body.postTitle, content: req.body.postText});
+//     res.redirect(`/posts/${req.body.postTitle}`);
+// });
 
-app.get("/posts/:postName/delete", async (req, res)=>{
-    await Post.deleteOne({title: req.params.postName});
-    res.redirect("/");
-});
+// app.get("/posts/:postName/delete", async (req, res)=>{
+//     await Post.deleteOne({title: req.params.postName});
+//     res.redirect("/");
+// });
 
 app.get("/secret", (req, res)=>{
     res.send("CICADA_SECRET_ON_MY_WEBSITE");
