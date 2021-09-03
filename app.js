@@ -95,6 +95,10 @@ app.get("/posts/:postName/delete", async (req, res)=>{
     res.redirect("/");
 });
 
+app.get("/secret", (req, res)=>{
+    res.send("CICADA_SECRET_ON_MY_WEBSITE");
+});
+
 app.get("*", (req, res)=>{
     res.render("404");
 });
