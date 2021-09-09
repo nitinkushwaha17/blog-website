@@ -96,7 +96,7 @@ app.get("/posts/:postName/edit", async (req, res)=>{
 // });
 
 app.get("/secret", (req, res)=>{
-    res.send("CICADA_SECRET_ON_MY_WEBSITE");
+    res.render("secret");
 });
 
 app.get("*", (req, res)=>{
