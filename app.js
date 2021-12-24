@@ -85,10 +85,10 @@ app.get("/posts/:postName/edit", async (req, res)=>{
     }
 });
 
-// app.post("/posts/:postName/edit", async (req, res)=>{
-//     await Post.updateOne({title: req.params.postName}, {title: req.body.postTitle, content: req.body.postText});
-//     res.redirect(`/posts/${req.body.postTitle}`);
-// });
+app.post("/posts/:postName/edit", async (req, res)=>{
+    await Post.updateOne({title: req.params.postName}, {title: req.body.postTitle, content: req.body.postText});
+    res.redirect(`/posts/${req.body.postTitle}`);
+});
 
 // app.get("/posts/:postName/delete", async (req, res)=>{
 //     await Post.deleteOne({title: req.params.postName});
