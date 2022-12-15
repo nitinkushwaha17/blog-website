@@ -1,6 +1,6 @@
 # A simple blog website with CRUD operations
 
-Hosted at <a href="https://obscure-dawn-62912.herokuapp.com/">https://obscure-dawn-62912.herokuapp.com</a>
+Hosted at <a href="https://thebloggerspot.up.railway.app/">https://thebloggerspot.up.railway.app/</a>
 
 <hr>
 
